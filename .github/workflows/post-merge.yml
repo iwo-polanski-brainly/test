@@ -1,0 +1,20 @@
+name: Post-Merge Workflow
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - 'release/**'
+
+jobs:
+  post-merge-job:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Run your step
+        run: |
+          echo "This runs on the release branch after a PR is successfully merged"
