@@ -1,0 +1,24 @@
+name: PR Merge Detector
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - 'release/**'
+
+jobs:
+  check-merge:
+    if: ${{ github.event.pull_request.merged == true }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Secondary Workflow
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'post.yml',
+              ref: '${{ github.event.pull_request.base.ref }}',
+            });
