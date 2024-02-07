@@ -4,6 +4,8 @@ on:
     workflows: [ Build ]
     types:
       - completed
+    branches:
+      - 'release/**'
 
 jobs:
   post:
@@ -13,3 +15,13 @@ jobs:
       - name: Install dependencies
         run: |
           echo 123
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - run: echo 'The triggering workflow passed'
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: echo 'The triggering workflow failed'
