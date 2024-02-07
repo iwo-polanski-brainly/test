@@ -1,20 +1,26 @@
 name: Post
 on:
   workflow_run:
-    workflows: [ Build ]
+    workflows: ["Post-Merge Workflow"]
     types:
       - completed
     branches:
       - 'release/**'
+
+  workflow_dispatch:
 
 jobs:
   post:
     name: Post
     runs-on: ubuntu-latest
     steps:
-      - name: Install dependencies
+      - name: Check out the repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Run your step
         run: |
-          echo 123
+          echo "This runs on the release branch after the initial workflow is successfully completed"
   on-success:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
