@@ -1,0 +1,15 @@
+name: Post
+on:
+  workflow_run:
+    workflows: [ Build ]
+    types:
+      - completed
+
+jobs:
+  post:
+    name: Post
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install dependencies
+        run: |
+          echo 123
